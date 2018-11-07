@@ -7,17 +7,21 @@ script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   - docker build -t consul-server docker-images/consul-server
-  - docker tag consul-server $DOCKER_USERNAME/consul-server
-  - docker push $DOCKER_USERNAME/consul-server
+  - docker tag consul-server $DOCKER_USERNAME/consul-server:$COMMIT
+  - docker push $DOCKER_USERNAME/consul-server:$COMMIT
 
   - docker build -t consul-agent docker-images/consul-agent
-  - docker tag consul-agent $DOCKER_USERNAME/consul-agent
-  - docker push $DOCKER_USERNAME/consul-agent
+  - docker tag consul-agent $DOCKER_USERNAME/consul-agent:$COMMIT
+  - docker push $DOCKER_USERNAME/consul-agent:$COMMIT
 
   - docker build -t consul-registrator docker-images/consul-registrator
-  - docker tag consul-server $DOCKER_USERNAME/consul-registrator
-  - docker push $DOCKER_USERNAME/consul-registrator
+  - docker tag consul-server $DOCKER_USERNAME/consul-registrator:$COMMIT
+  - docker push $DOCKER_USERNAME/consul-registrator:$COMMIT
 
   - docker build -t linkerd docker-images/linkerd
-  - docker tag consul-server $DOCKER_USERNAME/linkerd
-  - docker push $DOCKER_USERNAME/linkerd
+  - docker tag consul-server $DOCKER_USERNAME/linkerd:$COMMIT
+  - docker push $DOCKER_USERNAME/linkerd:$COMMIT
+env:
+  matrix:
+    - secure: G4UzOc44NybCFedM3HsuD/CkOsPajdYccwhS2S/zvc/W03EJS7gxL07NEI9xs85JXmGecxlrpE99CM1TpwDtF/4ErfD8s9GvObL3VIF6tGk8g6vC7rMou6Z++ofmjMaV9z+M7a2xhsn3vAy7X71XJedxBgU1XVVNnwfOkZhufRXkWatsI9Z8kZKhq4cs9COIZ+u+ih8vCdWSE4oBiZrlqCpF6TlmSn2ZToiXcBOQMZNpXxP2G7WDYGEptYhA+kE3x+H0IqN5qa3YTNpOUWm73dc0nW326wZndzqB4W6RTF0m/s3uiQUz6Ev02RzVe9UarSU2xUP9nnzR44wOn2QtuhqtORZkiSdoSquvKFgxaaC3RHHm1tXq91B8qIf0LvW3Gmdc4h0SsxUqNRtRkMtVjzoOnWBHMHkvng4w1Lp596hMPnpjSuFMVdPoWhi+0FzEFL02oU4zr/dqVddYRXCjW8gqdi5BPBVlyzrpav70D/1xi3P98egYbpTEtMwotYMOodcwuNeziLqFh4W4llFy76vsvgBluO7oq2HcZfJ/U43R2A4w4Fceja71OIcWv2clGagT6EGmsc7zwWw+YDhyC8yXQ8RNt7DKpo0P8UeaQAN4upPEzzolkRvA1wgGdCyk0PUKsBi+uAC55+AkG+BO7PaNpjYhhVz1PjaPhnuyevw=
+    - COMMIT=${TRAVIS_COMMIT::8}
