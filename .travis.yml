@@ -1,20 +1,24 @@
 sudo: required
 services:
 - docker
-script:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker build -t consul-server docker-images/consul-server
-- docker tag consul-server ${DOCKER_USERNAME}/consul-server:$COMMIT
-- docker push ${DOCKER_USERNAME}/consul-server:$COMMIT
-- docker build -t consul-agent docker-images/consul-agent
-- docker tag consul-agent ${DOCKER_USERNAME}/consul-agent:$COMMIT
-- docker push ${DOCKER_USERNAME}/consul-agent:$COMMIT
-- docker build -t consul-registrator docker-images/consul-registrator
-- docker tag consul-server ${DOCKER_USERNAME}/consul-registrator:$COMMIT
-- docker push ${DOCKER_USERNAME}/consul-registrator:$COMMIT
-- docker build -t linkerd docker-images/linkerd
-- docker tag consul-server ${DOCKER_USERNAME}/linkerd:$COMMIT
-- docker push ${DOCKER_USERNAME}/linkerd:$COMMIT
+
+jobs:
+  include:
+    - stage: 'build docker images'
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t consul-server docker-images/consul-server
+        - docker tag consul-server ${DOCKER_USERNAME}/consul-server:$COMMIT
+        - docker push ${DOCKER_USERNAME}/consul-server:$COMMIT
+        - docker build -t consul-agent docker-images/consul-agent
+        - docker tag consul-agent ${DOCKER_USERNAME}/consul-agent:$COMMIT
+        - docker push ${DOCKER_USERNAME}/consul-agent:$COMMIT
+        - docker build -t consul-registrator docker-images/consul-registrator
+        - docker tag consul-server ${DOCKER_USERNAME}/consul-registrator:$COMMIT
+        - docker push ${DOCKER_USERNAME}/consul-registrator:$COMMIT
+        - docker build -t linkerd docker-images/linkerd
+        - docker tag consul-server ${DOCKER_USERNAME}/linkerd:$COMMIT
+        - docker push ${DOCKER_USERNAME}/linkerd:$COMMIT
 env:
   matrix:
   - COMMIT=${TRAVIS_COMMIT::8}
