@@ -1,27 +1,22 @@
 sudo: required
-
 services:
-  - docker
-
+- docker
 script:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-  - docker build -t consul-server docker-images/consul-server
-  - docker tag consul-server $DOCKER_USERNAME/consul-server:$COMMIT
-  - docker push $DOCKER_USERNAME/consul-server:$COMMIT
-
-  - docker build -t consul-agent docker-images/consul-agent
-  - docker tag consul-agent $DOCKER_USERNAME/consul-agent:$COMMIT
-  - docker push $DOCKER_USERNAME/consul-agent:$COMMIT
-
-  - docker build -t consul-registrator docker-images/consul-registrator
-  - docker tag consul-server $DOCKER_USERNAME/consul-registrator:$COMMIT
-  - docker push $DOCKER_USERNAME/consul-registrator:$COMMIT
-
-  - docker build -t linkerd docker-images/linkerd
-  - docker tag consul-server $DOCKER_USERNAME/linkerd:$COMMIT
-  - docker push $DOCKER_USERNAME/linkerd:$COMMIT
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- docker build -t consul-server docker-images/consul-server
+- docker tag consul-server $DOCKER_USERNAME/consul-server:$COMMIT
+- docker push $DOCKER_USERNAME/consul-server:$COMMIT
+- docker build -t consul-agent docker-images/consul-agent
+- docker tag consul-agent $DOCKER_USERNAME/consul-agent:$COMMIT
+- docker push $DOCKER_USERNAME/consul-agent:$COMMIT
+- docker build -t consul-registrator docker-images/consul-registrator
+- docker tag consul-server $DOCKER_USERNAME/consul-registrator:$COMMIT
+- docker push $DOCKER_USERNAME/consul-registrator:$COMMIT
+- docker build -t linkerd docker-images/linkerd
+- docker tag consul-server $DOCKER_USERNAME/linkerd:$COMMIT
+- docker push $DOCKER_USERNAME/linkerd:$COMMIT
 env:
   matrix:
-    - secure: G4UzOc44NybCFedM3HsuD/CkOsPajdYccwhS2S/zvc/W03EJS7gxL07NEI9xs85JXmGecxlrpE99CM1TpwDtF/4ErfD8s9GvObL3VIF6tGk8g6vC7rMou6Z++ofmjMaV9z+M7a2xhsn3vAy7X71XJedxBgU1XVVNnwfOkZhufRXkWatsI9Z8kZKhq4cs9COIZ+u+ih8vCdWSE4oBiZrlqCpF6TlmSn2ZToiXcBOQMZNpXxP2G7WDYGEptYhA+kE3x+H0IqN5qa3YTNpOUWm73dc0nW326wZndzqB4W6RTF0m/s3uiQUz6Ev02RzVe9UarSU2xUP9nnzR44wOn2QtuhqtORZkiSdoSquvKFgxaaC3RHHm1tXq91B8qIf0LvW3Gmdc4h0SsxUqNRtRkMtVjzoOnWBHMHkvng4w1Lp596hMPnpjSuFMVdPoWhi+0FzEFL02oU4zr/dqVddYRXCjW8gqdi5BPBVlyzrpav70D/1xi3P98egYbpTEtMwotYMOodcwuNeziLqFh4W4llFy76vsvgBluO7oq2HcZfJ/U43R2A4w4Fceja71OIcWv2clGagT6EGmsc7zwWw+YDhyC8yXQ8RNt7DKpo0P8UeaQAN4upPEzzolkRvA1wgGdCyk0PUKsBi+uAC55+AkG+BO7PaNpjYhhVz1PjaPhnuyevw=
-    - COMMIT=${TRAVIS_COMMIT::8}
+  - COMMIT=${TRAVIS_COMMIT::8}
+  - secure: foeMM5tTw8IgssVKXmcsPI2kLHT5/V8Qb6zFj6uHEuvzl5uZapNiWuI0L8ANBmhRDYqNwBznljTscShQzOhq4xlrOGagzD3sfZO/Yzx+r5pzQK2R7rxjJ2Y79rVU15g+6AL+w585NCZKd29rll4lvW7m6JzYW/PQdfdevkzj7RICltWT5O/FTDp3Aa2MgkEsttXUyKKFxV8K6eOvU4cGm9dus4BKeaCkYdkJdtGA89eJVrsLrXvVi/b+Ar30TVKabguYo7jBD1AaLRDcf1ygU7ox0lhJZk7zdyl4P4Y4j3M3YNiKaz6/9Ykm8/L5hyDy3sX5nj3Kjbx9yNRlh/l+H4X5bZyx0+JW2XHCClDXjFmU49ryEP6+RkL9gE/vGo41JSXgOU0b2AbblI43ADE8v3h++Eu+QnZTiVuZuMVGrlDPNLByRhp5PUBeEphgxZ7ri/EBTDwsDiHe0heOp7mxyTD836aIpcz25wL8lJIkY9k8l1g0oLFykamtstYeVOgAssSVrPGVyDREnMsFSf8PKpPX0oLf/uf66MHiF4IjVqk7FdNofIo0iX58Mwgu3I0N0/jS2K6cpvCYntcmu4LpZlI/EmnTyUOWTCH+Z+KFLrs52H0SxL8i3FZtEdxEesYBKDnFF48ggNpnPBg+hw9DGd8dVmZEusZIdmz84yuyx5E=
+  - secure: YoWkMHFji9akVLqHsghAtG4Wp/V2O+4tr9/P+k6cpL+d5QTndkvATivMUYKohqlRJ2+yrmtL/sjU2Ea8u2bV8iIO4aiO7j6UkI/S/CJUIeVExDBur0lnJqeldBEAM9Sq40sdmSB7GrSCeA07vT7Hrf8ookrP/0X3RPBifWmSld6vAgq/TpdpMQKT1Xfj7CebP3Xmi7hy+Pgxb8gzPOu6fuxdOMfQxuy4XX3Z1EzFy996FRD75i8ZEB1PXBDBuiQhgLvGTo3uwUndBFFkECTzvm06+Y0sVY+nnSzQHvWcvRF0fXEU6+tEX+n6CWrgHg7OfitUx0a5r6Hjjj5OBRZ8RWa86wr8mOp2PBHf/OP1hldtUcQe+pfa9ye+aBoIrSAlcLsdaDsODxblHtnSf531OWKKZpFxWG855JgLd4klDKLeiIa4FwL302GZgWQYcxS+ThhJ/Ic3fbnNSBk6qgSXejhOIGDFnR+SsZ1NW8bQH5i//9OGYfee4wH7JvVWvxPshan/ycswssZCCKaDiru5j1hCbQ1iYCOi7bWy6dentWKgddZX6W2DiaaYAwfpzDADGAZes1n204tcckNYBH78VKEeNXLG6oDRVPyyVGyFU4A5VLEv3c6qfYPaM5oqzixu3csUmToqipaaw0nDBBYZS+ia/67vDZplx6c0Gbi9t6E=
