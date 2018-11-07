@@ -2,22 +2,20 @@ sudo: required
 services:
 - docker
 
+before_install:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 script:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t consul-server docker-images/consul-server
-  - docker tag consul-server ${DOCKER_USERNAME}/consul-server:$COMMIT
-  - docker push ${DOCKER_USERNAME}/consul-server:$COMMIT
-  - docker build -t consul-agent docker-images/consul-agent
-  - docker tag consul-agent ${DOCKER_USERNAME}/consul-agent:$COMMIT
-  - docker push ${DOCKER_USERNAME}/consul-agent:$COMMIT
-  - docker build -t consul-registrator docker-images/consul-registrator
-  - docker tag consul-server ${DOCKER_USERNAME}/consul-registrator:$COMMIT
-  - docker push ${DOCKER_USERNAME}/consul-registrator:$COMMIT
-  - docker build -t linkerd docker-images/linkerd
-  - docker tag consul-server ${DOCKER_USERNAME}/linkerd:$COMMIT
-  - docker push ${DOCKER_USERNAME}/linkerd:$COMMIT
+- docker build -t ${NAME} docker-images/${NAME}
+- docker tag ${NAME} ${DOCKER_USERNAME}/${NAME}:$COMMIT
+- docker push ${DOCKER_USERNAME}/${NAME}:$COMMIT
 env:
+  global:
   - COMMIT=${TRAVIS_COMMIT::8}
   - secure: BvLBW6VlLhXwp6AV0b4h8HumYFLU4tcKKCvXPZXBamyjSmeMCKpJF/RiTzNKi9Bs5VgXlhblLERYSKELr9azEhtwSQKURF2J+kEGZAztbahuJ63wNGTPCnyKEHTrpUdbErGcl/PMinCjCSm25GwCGAYu+0qAAmHGgDu+m8h3MSEQOc06PCmrmYyd7Oa1rQLRMSJ3mpysmIBpuB/dfVqbmxkx+oGIZsCTK9o8T8lHA4u5d6OAhF+bIZRuqQ2xVmd/aVH1cQ3kFECJDUXsqZfuQglGeB3iJd1e2x9EluL/uuMN7Ew4PZzqrvTC6BKpGEoeWkBQMbSA8NjZCJ0OaQy4VU9ajFHS8tXqvn+D5uqmyEs0GCsXK5kNalFFpAWFpEXgdPOfFUag46qHTJmuOd/AsMXwqV8uS0ttdTqavbxu9HmrNJ1kE67ke2173X8r8C6y5CbqZqisG9loZ6oABFmN14NJBqFz9EWVSmcloHKhqhq7+ePAO+tjhWQKnLEm2A2xnv5Vbz10pKXObidcC6DagcYpTHseAKxtNaV907bXSqgCfF+6nZyfRo/TmFiVDvDNLeHnc8niGStHULhnK2GnkYJoWPivGWqkbVWHgHBh+4VZTLUXo1NrKeY/Vl7LRspi1hGgMr6bQbXA1HO/hM7yQLZSC1QDSAFUfegWlXwLH5M=
   - secure: hSBCIoL5s875v/zOHZ0utMJgZZWOxSC+anzdIV1IyuVzkfHx6Typk8TlPP3gHInksJVXmjCo2T7vBy3w/xjumUD9ZARnW4g/P1OAJ9Sk2n4Vq6TheW+FsuOJDczYuB26J31dO5F5Mo+oWVMRVxg16jku+knm0GAKJWVSQvS9l8FGgc/ZnIDx/n1oYZca6mk9mL26iLnlLbnThHlTYfu+oI1ewDytv5ns6iUNmekXfoaUv9O98Nv9oxsGWXyqQCJ2spTmQIVz/ennZS9u/c0RliDHktRl8k8mhyaoWU6eU47X95LCrT3oeiaIHgw4yEiHEjo51As5uUlDHYzOjakoTZuA5jVylh7mhK3/Q3P1iBP4lm+RavxIFMT94EtDdKIshD5AyhCPcgvfSrLnfxJqKz7ewVkLYlaXMTCelRu2jN8GmujPZxEl8QpXMFtUZx+NyF18uAD3wx0mquzPwR4U6jHHZRyugLEw5ceLhrBX5IUfo8y08DaFW0bRyeZ4/y0cxc2TA/N3lOrwSDKS852AlU25s46nKP0tUI4rTO5i7CL/flo+N9c6QPpvl26yk4NQFFIRMEnw66mccKEMlo9YT6sXtziIJ07/Wnimh9cb/kgtvkgBvj5vDi9K4dlQkQ6nRaXAYMwBTDHLcsXKmTAAQ2IdXMtJ0knaCAKpwPnIUl8=
+  matrix:
+  - NAME=linkerd
+  - NAME=consul-registrator
+  - NAME=consul-agent
+  - NAME=consul-server
