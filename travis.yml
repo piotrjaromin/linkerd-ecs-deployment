@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+  - docker build -t consul-server docker-images/consul-server
+  - docker tag consul-server $DOCKER_USERNAME/consul-server
+  - docker push $DOCKER_USERNAME/consul-server
+
+  - docker build -t consul-agent docker-images/consul-agent
+  - docker tag consul-agent $DOCKER_USERNAME/consul-agent
+  - docker push $DOCKER_USERNAME/consul-agent
+
+  - docker build -t consul-registrator docker-images/consul-registrator
+  - docker tag consul-server $DOCKER_USERNAME/consul-registrator
+  - docker push $DOCKER_USERNAME/consul-registrator
+
+  - docker build -t linkerd docker-images/linkerd
+  - docker tag consul-server $DOCKER_USERNAME/linkerd
+  - docker push $DOCKER_USERNAME/linkerd
